@@ -1,4 +1,4 @@
-import { signInOnSubmit, signInFb } from '../view-controller.js';
+import { signInOnSubmit, signInFb, signInGoogle } from '../view-controller.js';
 
 // Figure:
 export const figureLoginRegistro = () => {
@@ -42,8 +42,9 @@ const mainLoginForm = () => {
               <p class='parrafo'>O bien ingresa con...</p>
             <div id='iconoRedesSociales'>
                 <a href='#home' id='enlaceLoginFb'><img src='https://image.flaticon.com/icons/png/512/2392/premium/2392485.png' class='iconRed'></a>
-                <a href='#'><img src='https://icon-library.net/images/google-icon-search/google-icon-search-19.jpg' class='iconRed'></a>
+                <a href='#home' id='enlaceLoginGoogle'><img src='https://icon-library.net/images/google-icon-search/google-icon-search-19.jpg' class='iconRed'></a>
             </div>
+            <span name='messageLoginRedes'></span>
             <p class='parrafo'>¿No tienes una cuenta? <a href="#/creacuenta" id='enlaceRegistro'>Regístrate</a></p>   
           </section>   
         `;
@@ -53,8 +54,12 @@ const mainLoginForm = () => {
   const eventoBotonLogin = mainLogin.querySelector('#botonLogin');
   eventoBotonLogin.addEventListener('click', signInOnSubmit);
 
-  const eventoBotonLoginFb = mainLogin.querySelector('#enlaceLoginFb');
-  eventoBotonLoginFb.addEventListener('click', signInFb);
+  const eventoEnlaceLoginFb = mainLogin.querySelector('#enlaceLoginFb');
+  eventoEnlaceLoginFb.addEventListener('click', signInFb);
+
+  const eventoEnlaceLoginGoogle = mainLogin.querySelector('#enlaceLoginGoogle');
+  eventoEnlaceLoginGoogle.addEventListener('click', signInGoogle);
+
 
   return mainLogin;
 };

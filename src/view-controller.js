@@ -1,5 +1,5 @@
 import {
-  inicioSesion, registro, user, addNote, deleteNote, loginFb, setUser, signOut,
+  inicioSesion, registro, user, addNote, deleteNote, loginFb, loginGoogle, setUser, signOut,
 } from './controller/firebase-controller.js';
 
 const changeHash = (hash) => {
@@ -135,6 +135,35 @@ export const signInFb = (event) => {
   event.preventDefault();
 
   loginFb()
+    .then((result) => {
+      const userId = result.user.uid;
+      const userData = {
+        name: result.user.displayName,
+        email: result.user.email,
+        photoURL: result.user.photoURL,
+      };
+
+      setUser(userId, userData);
+
+      changeHash('/home');
+    }).catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+
+      console.log(errorCode, errorMessage);
+
+      const email = error.email;
+      const credential = error.credential;
+
+      console.log(email, credential);
+    });
+};
+
+
+export const signInGoogle = (event) => {
+  event.preventDefault();
+
+  loginGoogle()
     .then((result) => {
       const userId = result.user.uid;
       const userData = {

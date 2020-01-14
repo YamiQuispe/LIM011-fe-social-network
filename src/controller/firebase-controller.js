@@ -23,6 +23,12 @@ export const loginFb = () => {
 };
 
 
+export const loginGoogle = () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  return firebase.auth().signInWithPopup(provider);
+};
+
+
 export const registro = (email, password) => (
   firebase.auth().createUserWithEmailAndPassword(email, password));
 
