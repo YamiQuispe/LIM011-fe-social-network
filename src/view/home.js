@@ -6,6 +6,7 @@ const headerHome = () => {
   header.id = 'headerVistaHome';
 
   header.innerHTML = `
+    <button>Mi perfil</button>
     <h3>Bienvenido a tu red social</h3>
     <button id='botonSignOut'>Cierra sesión</button>`;
 

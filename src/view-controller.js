@@ -134,6 +134,9 @@ export const accountRegistration = (event) => {
 export const signInFb = (event) => {
   event.preventDefault();
 
+  const enlaceLogin = event.target;
+  const spanErrorRed = enlaceLogin.closest('form').querySelector('span[name=messageLoginRedes]');
+
   loginFb()
     .then((result) => {
       const userId = result.user.uid;
@@ -156,6 +159,45 @@ export const signInFb = (event) => {
       const credential = error.credential;
 
       console.log(email, credential);
+
+      switch (errorCode) {
+        case 'auth/account-exists-with-different-credential':
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">Ya existe una cuenta con la dirección de correo<br> electrónico afirmada por la credencial.</p>`;
+          break;
+        case 'auth/auth-domain-config-required':
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">No se proporciono la configuración de authDomain al<br> llamar a firebase.</p>`;
+          break;
+        case 'auth/cancelled-popup-request':
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">Error: Se activaron sucesivas operaciones emergentes.<br> Solo se permite una solicitud emergente a la vez.</p>`;
+          break;
+        case 'auth/operation-not-allowed':
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">La cuenta no se encuentra habilitada.</p>`;
+          break;
+        case 'auth/operation-not-supported-in-this-environment':
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">Esta operación no es compatible con el entorno en<br> el que se ejecuta su aplicación. El protocolo debe <br>ser http o https.</p>`;
+          break;
+        case 'auth/popup-blocked':
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">El navegador bloqueó la ventana emergente.</p>`;
+          break;
+        case 'auth/popup-closed-by-user':
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">Error: Ha cerrado la ventana emergente sin <br>completar el inicio de sesión en el proveedor.</p>`;
+          break;
+        case 'auth/unauthorized-domain':
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">El dominio de la aplicación no se encuentra<br> autorizado.</p>`;
+          break;
+        default:
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">Error no identificado.</p>`;
+          break;
+      }
     });
 };
 
@@ -185,6 +227,48 @@ export const signInGoogle = (event) => {
       const credential = error.credential;
 
       console.log(email, credential);
+
+      const enlaceLogin = event.target;
+      const spanErrorRed = enlaceLogin.closest('form').querySelector('span[name=messageLoginRedes]');
+
+      switch (errorCode) {
+        case 'auth/account-exists-with-different-credential':
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">Ya existe una cuenta con la dirección de correo<br> electrónico afirmada por la credencial.</p>`;
+          break;
+        case 'auth/auth-domain-config-required':
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">No se proporciono la configuración de authDomain al<br> llamar a firebase.</p>`;
+          break;
+        case 'auth/cancelled-popup-request':
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">Error: Se activaron sucesivas operaciones emergentes.<br> Solo se permite una solicitud emergente a la vez.</p>`;
+          break;
+        case 'auth/operation-not-allowed':
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">La cuenta no se encuentra habilitada.</p>`;
+          break;
+        case 'auth/operation-not-supported-in-this-environment':
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">Esta operación no es compatible con el entorno en<br> el que se ejecuta su aplicación. El protocolo debe <br>ser http o https.</p>`;
+          break;
+        case 'auth/popup-blocked':
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">El navegador bloqueó la ventana emergente.</p>`;
+          break;
+        case 'auth/popup-closed-by-user':
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">Error: Ha cerrado la ventana emergente sin <br>completar el inicio de sesión en el proveedor.</p>`;
+          break;
+        case 'auth/unauthorized-domain':
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">El dominio de la aplicación no se encuentra<br> autorizado.</p>`;
+          break;
+        default:
+          spanErrorRed.innerHTML = `
+            <p style="font-size: 10px; margin: 3px; color: blue">Error no identificado.</p>`;
+          break;
+      }
     });
 };
 
