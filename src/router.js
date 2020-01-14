@@ -1,4 +1,4 @@
-import { components } from './vistas/index.js';
+import { components } from './view/index.js';
 
 export const viewChange = (hash) => {
   const sectionMain = document.getElementById('root');
