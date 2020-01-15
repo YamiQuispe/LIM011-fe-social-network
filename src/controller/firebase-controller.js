@@ -40,16 +40,17 @@ export const signOut = () => firebase.auth().signOut();
 export const addNote = objectPost => firebase.firestore().collection('notes').add(objectPost);
 
 
-export const getNotes = callback => firebase.firestore().collection('notes').orderBy('datePost', 'desc')
+export const getNotes = callback => firebase.firestore().collection('notes').orderBy('date', 'desc')
   .onSnapshot((querySnapshot) => {
     const data = [];
 
     querySnapshot.forEach((doc) => {
       data.push({
         id: doc.id,
-        name: 'nombre',
+        name: doc.data().name,
+        photo: doc.data().photo,
         note: doc.data().note,
-        date: doc.data().datePost,
+        date: doc.data().date,
       });
 
       console.log(doc.id);
@@ -59,6 +60,9 @@ export const getNotes = callback => firebase.firestore().collection('notes').ord
 
     callback(data);
   });
+
+
+export const updateNote = (idNote, noteObject) => firebase.firestore().collection('notes').doc(idNote).update(noteObject);
 
 
 export const deleteNote = idNote => firebase.firestore().collection('notes').doc(idNote).delete();

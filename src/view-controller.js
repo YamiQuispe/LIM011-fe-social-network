@@ -1,5 +1,6 @@
 import {
-  inicioSesion, registro, user, addNote, deleteNote, loginFb, loginGoogle, setUser, signOut,
+  inicioSesion, registro, user, addNote, updateNote, deleteNote, loginFb, loginGoogle, setUser,
+  signOut,
 } from './controller/firebase-controller.js';
 
 const changeHash = (hash) => {
@@ -135,7 +136,7 @@ export const signInFb = (event) => {
   event.preventDefault();
 
   const enlaceLogin = event.target;
-  const spanErrorRed = enlaceLogin.closest('form').querySelector('span[name=messageLoginRedes]');
+  const spanErrorRed = enlaceLogin.closest('main').querySelector('span[name=messageLoginRedes]');
 
   loginFb()
     .then((result) => {
@@ -346,18 +347,28 @@ export const addNoteOnSubmit = (event) => {
   const date = new Date();
   const dataPost = {
     note: inputPost.value,
-    // nameUser: userRed.displayName,
-    nameUser: 'name',
-    datePost: datePost(date),
+    name: userRed.displayName,
+    photo: userRed.photoURL,
+    date: datePost(date),
   };
 
   addNote(dataPost)
-    .then(() => {
+    .then((result) => {
       inputPost.value = '';
       console.log('Nota agregada.');
     }).catch(() => {
       inputPost.value = '';
       console.log('Error.');
+    });
+};
+
+
+export const updateNoteOnClick = (idNote, note) => {
+  updateNote(idNote, note)
+    .then(() => {
+      console.log('Nota modificada.');
+    }).catch((error) => {
+      console.log('Error:', error);
     });
 };
 
