@@ -1,16 +1,17 @@
 import {
-  addNoteOnSubmit, deleteNoteOnClick, signOutEvent, updateNoteOnClick,
+  addNoteOnSubmit, deleteNoteOnClick, signOutEvent, updateNoteOnClick, datePost
 } from '../view-controller.js';
-import { getNotes } from '../controller/firebase-controller.js';
+import { getNotes, user } from '../controller/firebase-controller.js';
 
-const headerHome = () => {
+
+export const headerHome = () => {
   const header = document.createElement('header');
   header.id = 'headerVistaHome';
 
   header.innerHTML = `
-    <button>Mi perfil</button>
+    <button>Mi perfil&nbsp &nbsp &nbsp<i class="fas fa-user"></i></button>
     <h3>Bienvenido a tu red social</h3>
-    <button id='botonSignOut'>Cierra sesión</button>`;
+    <button id='botonSignOut'>Cierra sesión &nbsp &nbsp<i class="fas fa-puzzle-piece"></i></button>`;
 
   header.querySelector('#botonSignOut').addEventListener('click', signOutEvent);
 
@@ -24,7 +25,7 @@ const itemNote = (objNote) => {
   liElement.innerHTML = `
         <article id="articlePost-${objNote.id}" style="width:300px; height: 150px; background: white">
           <section>
-          <div><img src="${objNote.photo}" style="width: 40px"></img></div>
+          <div><img src="${objNote.photo}" style="width: 30px"></img></div>
             <span><a href="#">${objNote.name}</a></span>
             <button id="buttonUpdate-${objNote.id}"><i class="far fa-edit"></i></button>
             <button id="buttonDelete-${objNote.id}"><i class="far fa-trash-alt"></i></button>
@@ -35,6 +36,10 @@ const itemNote = (objNote) => {
           <span id="spanNote-${objNote.id}">
             <p>${objNote.note}</p>
           </span>
+          <input class="hide" type="text" id="inputEdited-${objNote.id}" value="${objNote.note}"></input>
+            <br>
+            <button class="hide" id="saveUpdate-${objNote.id}">Guardar</button>
+            <button class="hide" id="cancelUpdate-${objNote.id}">Cancelar</button>
           <section id="sectionLikesComents-${objNote.id}">
           </section>
         </article>
@@ -68,84 +73,54 @@ const sectionNotes = (notes) => {
   sectionContainer.innerHTML = homeContent;
 
   const buttonAddNote = sectionContainer.querySelector('#boton-add-note');
+  console.log(buttonAddNote);
   const ul = sectionContainer.querySelector('#notes-list');
 
   notes.forEach((note) => {
     ul.appendChild(itemNote(note));
 
+    const articlePost = sectionContainer.querySelector(`#articlePost-${note.id}`);
+    const articlePostTemplate = articlePost.innerHTML;
+    const spanDate = articlePost.querySelector(`#spanDate-${note.id}`);
+    const spanNote = articlePost.querySelector(`#spanNote-${note.id}`);
+    const sectionLikesComents = articlePost.querySelector(`#sectionLikesComents-${note.id}`);
+    const inputEdited = articlePost.querySelector(`#inputEdited-${note.id}`);
+    const buttonSave = ul.querySelector(`#saveUpdate-${note.id}`);
+    const buttonCancel = ul.querySelector(`#cancelUpdate-${note.id}`);
+
     const buttonDeleteNote = sectionContainer.querySelector(`#buttonDelete-${note.id}`);
     const buttonUpdateNote = sectionContainer.querySelector(`#buttonUpdate-${note.id}`);
 
     const buttonUpdate = () => {
-      const articlePost = sectionContainer.querySelector(`#articlePost-${note.id}`);
-      const articlePostTemplate = articlePost.innerHTML;
-
-      const spanDate = ul.querySelector(`#spanDate-${note.id}`);
-      const spanNote = ul.querySelector(`#spanNote-${note.id}`);
-      const sectionLikesComents = ul.querySelector(`#sectionLikesComents-${note.id}`);
-
       const noteValue = spanNote.childNodes[1].innerHTML;
+      console.log(noteValue);
 
-      /* spanDate.setAttribute('style', 'display: none');
-      spanNote.setAttribute('style', 'display: none');
-      sectionLikesComents.setAttribute('style', 'display: none'); */
+      spanDate.classList.add('hide');
+      spanNote.classList.add('hide');
+      sectionLikesComents.classList.add('hide');
 
-      spanDate.remove();
-      spanNote.remove();
-      sectionLikesComents.remove();
-
-      articlePost.innerHTML = `
-        <section>
-          <span><a href="#">Mi nombre</a></span>
-          <button id="buttonUpdate-${note.id}"><i class="far fa-edit"></i></button>
-          <button id="buttonDelete-${note.id}"><i class="far fa-trash-alt"></i></button>
-        </section>
-        <span id="spanDate-${note.id}">
-          <p>${note.date}</p>
-        </span>
-        <section>
-          <input type="text" id="inputEdited" value="${noteValue}"></input><br>
-          <button id="saveUpdate">Guardar</button>
-          <button id="cancelUpdate">Cancelar</button>
-        </section>
-        <section id="sectionLikesComents-${note.id}">
-        </section>`;
-
-      articlePost.querySelector('#saveUpdate').addEventListener('click', () => {
-        const inputUpdate = articlePost.querySelector('#inputEdited').attributes[2].value;
-        console.log(inputUpdate);
-        const dataNote = {
-          date: new Date(),
-          name: 'nombre',
-          note: inputUpdate,
-        };
-        updateNoteOnClick(note.id, dataNote);
-
-        articlePost.innerHTML = `
-        <section>
-          <span><a href="#">Mi nombre</a></span>
-          <button id="buttonUpdate-${note.id}"><i class="far fa-edit"></i></button>
-          <button id="buttonDelete-${note.id}"><i class="far fa-trash-alt"></i></button>
-        </section>
-          <span id="spanDate-${note.id}">
-            <p>${note.date}</p>
-          </span>
-        <span id="spanNote-${note.id}">
-          <p>${inputUpdate}</p>
-        </span>
-        </span>
-        <section id="sectionLikesComents-${note.id}">
-        </section>`;
-      });
-
-      articlePost.querySelector('#cancelUpdate').addEventListener('click', () => {
-        /* spanDate.setAttribute('style', 'display: block');
-        spanNote.setAttribute('style', 'display: block');
-        sectionLikesComents.setAttribute('style', 'display: block'); */
-
-        articlePost.innerHTML = articlePostTemplate;
-      });
+      inputEdited.classList.remove('hide');
+      buttonSave.classList.remove('hide');
+      buttonCancel.classList.remove('hide');
     };
+
+    buttonSave.addEventListener('click', () => {
+      const inputUpdate = inputEdited.value;
+      const date = new Date();
+      const userPost = user();
+      const dataNote = {
+        note: inputUpdate,
+        date: datePost(date),
+        name: userPost.displayName,
+        photo: userPost.photoURL,
+      };
+
+      updateNoteOnClick(note.id, dataNote);
+    });
+
+    buttonCancel.addEventListener('click', () => {
+      articlePost.innerHTML = articlePostTemplate;
+    });
 
     buttonUpdateNote.addEventListener('click', buttonUpdate);
     buttonDeleteNote.addEventListener('click', () => deleteNoteOnClick(note));

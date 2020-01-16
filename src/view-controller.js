@@ -148,6 +148,7 @@ export const signInFb = (event) => {
       };
 
       setUser(userId, userData);
+      headerHome();
 
       changeHash('/home');
     }).catch((error) => {
@@ -286,7 +287,7 @@ export const signOutEvent = (event) => {
 };
 
 
-const datePost = (date) => {
+export const datePost = (date) => {
   const yearPost = date.getFullYear();
   const monthPost = date.getMonth() + 1;
   const dayPost = date.getDate();
