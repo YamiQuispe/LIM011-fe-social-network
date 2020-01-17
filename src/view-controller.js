@@ -142,13 +142,13 @@ export const signInFb = (event) => {
     .then((result) => {
       const userId = result.user.uid;
       const userData = {
+        idUser: userId,
         name: result.user.displayName,
         email: result.user.email,
         photoURL: result.user.photoURL,
       };
 
       setUser(userId, userData);
-      headerHome();
 
       changeHash('/home');
     }).catch((error) => {
@@ -211,6 +211,7 @@ export const signInGoogle = (event) => {
     .then((result) => {
       const userId = result.user.uid;
       const userData = {
+        idUser: userId,
         name: result.user.displayName,
         email: result.user.email,
         photoURL: result.user.photoURL,
@@ -347,6 +348,7 @@ export const addNoteOnSubmit = (event) => {
   const userRed = user();
   const date = new Date();
   const dataPost = {
+    idUser: userRed.uid,
     note: inputPost.value,
     name: userRed.displayName,
     photo: userRed.photoURL,
@@ -354,7 +356,7 @@ export const addNoteOnSubmit = (event) => {
   };
 
   addNote(dataPost)
-    .then((result) => {
+    .then(() => {
       inputPost.value = '';
       console.log('Nota agregada.');
     }).catch(() => {

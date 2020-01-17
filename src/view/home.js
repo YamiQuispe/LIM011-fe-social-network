@@ -1,17 +1,19 @@
 import {
-  addNoteOnSubmit, deleteNoteOnClick, signOutEvent, updateNoteOnClick, datePost
+  addNoteOnSubmit, deleteNoteOnClick, signOutEvent, updateNoteOnClick,
 } from '../view-controller.js';
 import { getNotes, user } from '../controller/firebase-controller.js';
 
 
-export const headerHome = () => {
+const headerHome = (notes) => {
   const header = document.createElement('header');
   header.id = 'headerVistaHome';
 
-  header.innerHTML = `
-    <button>Mi perfil&nbsp &nbsp &nbsp<i class="fas fa-user"></i></button>
-    <h3>Bienvenido a tu red social</h3>
-    <button id='botonSignOut'>Cierra sesión &nbsp &nbsp<i class="fas fa-puzzle-piece"></i></button>`;
+  notes.forEach((note) => {
+    header.innerHTML = `
+      <button>${note.name}&nbsp &nbsp &nbsp<i class="fas fa-user"></i></button>
+      <h3>Bienvenido a tu red social</h3>
+      <button id='botonSignOut'>Cierra sesión &nbsp &nbsp<i class="fas fa-puzzle-piece"></i></button>`;
+  });
 
   header.querySelector('#botonSignOut').addEventListener('click', signOutEvent);
 
@@ -80,7 +82,6 @@ const sectionNotes = (notes) => {
     ul.appendChild(itemNote(note));
 
     const articlePost = sectionContainer.querySelector(`#articlePost-${note.id}`);
-    const articlePostTemplate = articlePost.innerHTML;
     const spanDate = articlePost.querySelector(`#spanDate-${note.id}`);
     const spanNote = articlePost.querySelector(`#spanNote-${note.id}`);
     const sectionLikesComents = articlePost.querySelector(`#sectionLikesComents-${note.id}`);
@@ -90,6 +91,12 @@ const sectionNotes = (notes) => {
 
     const buttonDeleteNote = sectionContainer.querySelector(`#buttonDelete-${note.id}`);
     const buttonUpdateNote = sectionContainer.querySelector(`#buttonUpdate-${note.id}`);
+
+    if (user().displayName !== note.name) {
+      console.log((user().displayName));
+      buttonUpdateNote.classList.add('hide');
+      buttonDeleteNote.classList.add('hide');
+    }
 
     const buttonUpdate = () => {
       const noteValue = spanNote.childNodes[1].innerHTML;
@@ -106,11 +113,9 @@ const sectionNotes = (notes) => {
 
     buttonSave.addEventListener('click', () => {
       const inputUpdate = inputEdited.value;
-      const date = new Date();
       const userPost = user();
       const dataNote = {
         note: inputUpdate,
-        date: datePost(date),
         name: userPost.displayName,
         photo: userPost.photoURL,
       };
@@ -119,7 +124,13 @@ const sectionNotes = (notes) => {
     });
 
     buttonCancel.addEventListener('click', () => {
-      articlePost.innerHTML = articlePostTemplate;
+      inputEdited.classList.add('hide');
+      buttonSave.classList.add('hide');
+      buttonCancel.classList.add('hide');
+
+      spanDate.classList.remove('hide');
+      spanNote.classList.remove('hide');
+      sectionLikesComents.classList.remove('hide');
     });
 
     buttonUpdateNote.addEventListener('click', buttonUpdate);
@@ -136,14 +147,15 @@ export default () => {
   const divHome = document.createElement('div');
   divHome.id = 'divVistaHome';
 
-  divHome.appendChild(headerHome());
-
   getNotes((notes) => {
     // Condición si el elemento ya existe:
     if (document.getElementById('sectionNotes')) {
       document.getElementById('sectionNotes').remove();
     }
-
+    if (document.getElementById('headerVistaHome')) {
+      document.getElementById('headerVistaHome').remove();
+    }
+    divHome.appendChild(headerHome(notes));
     divHome.appendChild(sectionNotes(notes));
   });
 
