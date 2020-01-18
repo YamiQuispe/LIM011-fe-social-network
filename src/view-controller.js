@@ -9,9 +9,9 @@ const changeHash = (hash) => {
 
 
 export const datePost = (date) => {
-  const yearPost = date.getFullYear();
-  const monthPost = date.getMonth() + 1;
   const dayPost = date.getDate();
+  const monthPost = date.getMonth() + 1;
+  const yearPost = date.getFullYear();
   const hourPost = date.toLocaleTimeString();
   let completeDate;
 
@@ -359,13 +359,12 @@ export const addNoteOnSubmit = (event) => {
 
   const inputPost = document.getElementById('input-new-note');
   const userRed = user();
-  const dateNote = new Date();
   const dataPost = {
     idUser: userRed.uid,
     note: inputPost.value,
     name: userRed.displayName,
     photo: userRed.photoURL,
-    date: dateNote,
+    date: new Date(),
   };
 
   addNote(dataPost)

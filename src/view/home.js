@@ -1,5 +1,5 @@
 import {
-  addNoteOnSubmit, deleteNoteOnClick, signOutEvent, updateNoteOnClick,
+  addNoteOnSubmit, deleteNoteOnClick, signOutEvent, updateNoteOnClick, datePost
 } from '../view-controller.js';
 import { getNotes, user } from '../controller/firebase-controller.js';
 
@@ -33,7 +33,7 @@ const itemNote = (objNote) => {
             <button id="buttonDelete-${objNote.id}"><i class="far fa-trash-alt"></i></button>
           </section>
           <span id="spanDate-${objNote.id}">
-            <p>${objNote.date}</p>
+            <p>${datePost(objNote.date)}</p>
           </span>
           <span id="spanNote-${objNote.id}">
             <p>${objNote.note}</p>

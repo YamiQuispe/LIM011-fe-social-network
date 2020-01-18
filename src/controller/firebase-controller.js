@@ -10,6 +10,7 @@ export const user = () => {
   return hash;
 };
 
+
 export const setUser = (userId, userObject) => (
   firebase.firestore().collection('users').doc(userId).set(userObject));
 
@@ -57,7 +58,7 @@ export const getNotes = callback => firebase.firestore().collection('notes').ord
         name: doc.data().name,
         photo: doc.data().photo,
         note: doc.data().note,
-        date: doc.data().date,
+        date: doc.data().date.toDate(),
       });
     });
 
