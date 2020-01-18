@@ -4,16 +4,16 @@ import {
 import { getNotes, user } from '../controller/firebase-controller.js';
 
 
-const headerHome = (notes) => {
+const headerHome = () => {
   const header = document.createElement('header');
   header.id = 'headerVistaHome';
 
-  notes.forEach((note) => {
-    header.innerHTML = `
-      <button>${note.name}&nbsp &nbsp &nbsp<i class="fas fa-user"></i></button>
+  console.log(user());
+
+  header.innerHTML = `
+      <button>${user().displayName}&nbsp &nbsp &nbsp<i class="fas fa-user"></i></button>
       <h3>Bienvenido a tu red social</h3>
       <button id='botonSignOut'>Cierra sesión &nbsp &nbsp<i class="fas fa-puzzle-piece"></i></button>`;
-  });
 
   header.querySelector('#botonSignOut').addEventListener('click', signOutEvent);
 
@@ -147,15 +147,14 @@ export default () => {
   const divHome = document.createElement('div');
   divHome.id = 'divVistaHome';
 
+  divHome.appendChild(headerHome());
+
   getNotes((notes) => {
     // Condición si el elemento ya existe:
     if (document.getElementById('sectionNotes')) {
       document.getElementById('sectionNotes').remove();
     }
-    if (document.getElementById('headerVistaHome')) {
-      document.getElementById('headerVistaHome').remove();
-    }
-    divHome.appendChild(headerHome(notes));
+
     divHome.appendChild(sectionNotes(notes));
   });
 

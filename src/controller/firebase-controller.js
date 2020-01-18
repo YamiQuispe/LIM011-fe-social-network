@@ -1,8 +1,14 @@
 
-// Usuario:
-// currentUser: Permite obtener el usuario que accedió.
-export const user = () => firebase.auth().currentUser;
+export const user = () => {
+  if (firebase.auth().currentUser) {
+    return firebase.auth().currentUser;
+  }
 
+  window.location.hash = '/iniciasesion';
+  const hash = window.location.hash;
+
+  return hash;
+};
 
 export const setUser = (userId, userObject) => (
   firebase.firestore().collection('users').doc(userId).set(userObject));
@@ -53,11 +59,7 @@ export const getNotes = callback => firebase.firestore().collection('notes').ord
         note: doc.data().note,
         date: doc.data().date,
       });
-
-      console.log(doc.id);
     });
-
-    console.log(data);
 
     callback(data);
   });

@@ -8,6 +8,59 @@ const changeHash = (hash) => {
 };
 
 
+export const datePost = (date) => {
+  const yearPost = date.getFullYear();
+  const monthPost = date.getMonth() + 1;
+  const dayPost = date.getDate();
+  const hourPost = date.toLocaleTimeString();
+  let completeDate;
+
+  switch (monthPost) {
+    case 1:
+      completeDate = `${dayPost} de enero del ${yearPost} a las ${hourPost}`;
+      break;
+    case 2:
+      completeDate = `${dayPost} de febrero del ${yearPost} a las ${hourPost}`;
+      break;
+    case 3:
+      completeDate = `${dayPost} de marzo del ${yearPost} a las ${hourPost}`;
+      break;
+    case 4:
+      completeDate = `${dayPost} de abril del ${yearPost} a las ${hourPost}`;
+      break;
+    case 5:
+      completeDate = `${dayPost} de mayo del ${yearPost} a las ${hourPost}`;
+      break;
+    case 6:
+      completeDate = `${dayPost} de junio del ${yearPost} a las ${hourPost}`;
+      break;
+    case 7:
+      completeDate = `${dayPost} de julio del ${yearPost} a las ${hourPost}`;
+      break;
+    case 8:
+      completeDate = `${dayPost} de agosto del ${yearPost} a las ${hourPost}`;
+      break;
+    case 9:
+      completeDate = `${dayPost} de setiembre del ${yearPost} a las ${hourPost}`;
+      break;
+    case 10:
+      completeDate = `${dayPost} de octubre del ${yearPost} a las ${hourPost}`;
+      break;
+    case 11:
+      completeDate = `${dayPost} de noviembre del ${yearPost} a las ${hourPost}`;
+      break;
+    case 12:
+      completeDate = `${dayPost} de diciembre del ${yearPost} a las ${hourPost}`;
+      break;
+    default:
+      completeDate = 'Problemas para actualizar la hora y/o fecha.';
+      break;
+  }
+
+  return completeDate;
+};
+
+
 export const signInOnSubmit = (event) => {
   event.preventDefault();
 
@@ -82,6 +135,7 @@ export const accountRegistration = (event) => {
   const lastName = botonLogin.closest('form').querySelectorAll('input[type=text]')[1];
   const email = botonLogin.closest('form').querySelector('input[type=email]');
   const password = botonLogin.closest('form').querySelector('input[type=password]');
+  const date = botonLogin.closest('form').querySelector('input[type=date]');
   const textName = botonLogin.closest('form').querySelector('span[name=messageName]');
   const textLastName = botonLogin.closest('form').querySelector('span[name=messageLastName]');
   const textEmail = botonLogin.closest('form').querySelector('span[name=messageEmailRegistro]');
@@ -89,7 +143,19 @@ export const accountRegistration = (event) => {
 
   if (name.value !== '' && lastName.value !== '' && email.value !== '' && password.value !== '') {
     registro(email.value, password.value)
-      .then(() => changeHash('/home'))
+      .then((result) => {
+        const userId = result.user.uid;
+        const userData = {
+          idUser: user().uid,
+          name: `${name.value} ${lastName.value}`,
+          email: email.value,
+          date: datePost(date.value),
+        };
+
+        setUser(userId, userData);
+
+        return changeHash('/home');
+      })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -288,71 +354,18 @@ export const signOutEvent = (event) => {
 };
 
 
-export const datePost = (date) => {
-  const yearPost = date.getFullYear();
-  const monthPost = date.getMonth() + 1;
-  const dayPost = date.getDate();
-  const hourPost = date.toLocaleTimeString();
-  let completeDate;
-
-  switch (monthPost) {
-    case 1:
-      completeDate = `${dayPost} de enero del ${yearPost} a las ${hourPost}`;
-      break;
-    case 2:
-      completeDate = `${dayPost} de febrero del ${yearPost} a las ${hourPost}`;
-      break;
-    case 3:
-      completeDate = `${dayPost} de marzo del ${yearPost} a las ${hourPost}`;
-      break;
-    case 4:
-      completeDate = `${dayPost} de abril del ${yearPost} a las ${hourPost}`;
-      break;
-    case 5:
-      completeDate = `${dayPost} de mayo del ${yearPost} a las ${hourPost}`;
-      break;
-    case 6:
-      completeDate = `${dayPost} de junio del ${yearPost} a las ${hourPost}`;
-      break;
-    case 7:
-      completeDate = `${dayPost} de julio del ${yearPost} a las ${hourPost}`;
-      break;
-    case 8:
-      completeDate = `${dayPost} de agosto del ${yearPost} a las ${hourPost}`;
-      break;
-    case 9:
-      completeDate = `${dayPost} de setiembre del ${yearPost} a las ${hourPost}`;
-      break;
-    case 10:
-      completeDate = `${dayPost} de octubre del ${yearPost} a las ${hourPost}`;
-      break;
-    case 11:
-      completeDate = `${dayPost} de noviembre del ${yearPost} a las ${hourPost}`;
-      break;
-    case 12:
-      completeDate = `${dayPost} de diciembre del ${yearPost} a las ${hourPost}`;
-      break;
-    default:
-      completeDate = 'Problemas para actualizar la hora y/o fecha.';
-      break;
-  }
-
-  return completeDate;
-};
-
-
 export const addNoteOnSubmit = (event) => {
   event.preventDefault();
 
   const inputPost = document.getElementById('input-new-note');
   const userRed = user();
-  const date = new Date();
+  const dateNote = new Date();
   const dataPost = {
     idUser: userRed.uid,
     note: inputPost.value,
     name: userRed.displayName,
     photo: userRed.photoURL,
-    date: datePost(date),
+    date: dateNote,
   };
 
   addNote(dataPost)

@@ -17,7 +17,7 @@ export const viewChange = (hash) => {
 };
 
 
-const viewInitial = (hash) => {
+export const viewInitial = (hash) => {
   if (hash === '#/' || hash === '' || hash === '#') return viewChange('#/iniciasesion');
 
   if (hash === '#/iniciasesion') return viewChange(hash);
