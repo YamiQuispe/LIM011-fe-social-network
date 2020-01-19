@@ -1,4 +1,6 @@
 
+// Usuario:
+
 export const user = () => {
   if (firebase.auth().currentUser) {
     return firebase.auth().currentUser;
