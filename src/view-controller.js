@@ -296,11 +296,6 @@ export const signInGoogle = (event) => {
 
       console.log(errorCode, errorMessage);
 
-      const email = error.email;
-      const credential = error.credential;
-
-      console.log(email, credential);
-
       const enlaceLogin = event.target;
       const spanErrorRed = enlaceLogin.closest('section').querySelector('span[name=messageLoginRedes]');
 
