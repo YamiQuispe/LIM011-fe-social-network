@@ -1,5 +1,6 @@
 import {
   addNoteOnSubmit, deleteNoteOnClick, signOutEvent, updateNoteOnClick, datePost,
+  getUsers,
 } from '../view-controller.js';
 import { getNotes, user } from '../controller/firebase-controller.js';
 

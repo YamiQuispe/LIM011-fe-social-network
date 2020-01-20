@@ -6,10 +6,10 @@ export const user = () => {
     return firebase.auth().currentUser;
   }
 
-  window.location.hash = '/iniciasesion';
+  /* window.location.hash = '/iniciasesion';
   const hash = window.location.hash;
 
-  return hash;
+  return hash; */
 };
 
 
@@ -17,7 +17,7 @@ export const setUser = (userId, userObject) => (
   firebase.firestore().collection('users').doc(userId).set(userObject));
 
 
-export const getUser = () => firebase.firestore().collection('users').get();
+export const getUser = userId => firebase.firestore().collection('users').doc(userId).get();
 
 
 // Sesión:
