@@ -27,7 +27,7 @@ const itemNote = (objNote) => {
   liElement.innerHTML = `
         <article id="articlePost-${objNote.id}" style="width:300px; height: 150px; background: white">
           <section>
-          <div><img src="${objNote.photo}" style="width: 30px"></img></div>
+            <div>${objNote.photo !== null ? `<img src="${objNote.photo}" style="width: 30px">` : '<img src="img/user.jpg" style="width: 30px">'}</div>
             <span><a href="#">${objNote.name}</a></span>
             <button id="buttonUpdate-${objNote.id}"><i class="far fa-edit"></i></button>
             <button id="buttonDelete-${objNote.id}"><i class="far fa-trash-alt"></i></button>
