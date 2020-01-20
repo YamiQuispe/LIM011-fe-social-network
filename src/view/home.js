@@ -1,6 +1,5 @@
 import {
   addNoteOnSubmit, deleteNoteOnClick, signOutEvent, updateNoteOnClick, datePost,
-  getUsers,
 } from '../view-controller.js';
 import { getNotes, user } from '../controller/firebase-controller.js';
 
@@ -22,19 +21,24 @@ const headerHome = () => {
 };
 
 
-const userData = () => {
+const userData = (notes) => {
   const aside = document.createElement('aside');
   aside.id = 'asidePerfilUser';
 
-  aside.innerHTML = `
+  notes.forEach((note) => {
+    aside.innerHTML = `
     <aside>
       <figure>
       </figure>
       <section>
-      <p><span></span></p>
-      <p><span></span></p>
+      <p><span>${user().displayName}</span></p>
+      <p><span>Nuev@ usuari@.</span></p>
+      <div><simg src="${note.photo}"></div>
       </section>
     </aside>`;
+  });
+
+  return aside;
 };
 
 
@@ -172,6 +176,7 @@ export default () => {
       document.getElementById('sectionNotes').remove();
     }
 
+    divHome.appendChild(userData(notes));
     divHome.appendChild(sectionNotes(notes));
   });
 
