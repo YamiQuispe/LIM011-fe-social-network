@@ -302,7 +302,7 @@ export const signInGoogle = (event) => {
       console.log(email, credential);
 
       const enlaceLogin = event.target;
-      const spanErrorRed = enlaceLogin.closest('form').querySelector('span[name=messageLoginRedes]');
+      const spanErrorRed = enlaceLogin.closest('section').querySelector('span[name=messageLoginRedes]');
 
       switch (errorCode) {
         case 'auth/account-exists-with-different-credential':

@@ -6,10 +6,10 @@ export const user = () => {
     return firebase.auth().currentUser;
   }
 
-  /* window.location.hash = '/iniciasesion';
+  window.location.hash = '/iniciasesion';
   const hash = window.location.hash;
 
-  return hash; */
+  return hash;
 };
 
 

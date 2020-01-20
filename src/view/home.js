@@ -22,6 +22,22 @@ const headerHome = () => {
 };
 
 
+const userData = () => {
+  const aside = document.createElement('aside');
+  aside.id = 'asidePerfilUser';
+
+  aside.innerHTML = `
+    <aside>
+      <figure>
+      </figure>
+      <section>
+      <p><span></span></p>
+      <p><span></span></p>
+      </section>
+    </aside>`;
+};
+
+
 const itemNote = (objNote) => {
   const liElement = document.createElement('li');
 
