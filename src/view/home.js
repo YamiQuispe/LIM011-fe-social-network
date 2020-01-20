@@ -33,7 +33,7 @@ const userData = (notes) => {
       <section>
       <p><span>${user().displayName}</span></p>
       <p><span>Nuev@ usuari@.</span></p>
-      <div><simg src="${note.photo}"></div>
+      <div><simg src="${note.photo}" style="width: 30px"></div>
       </section>
     </aside>`;
   });
