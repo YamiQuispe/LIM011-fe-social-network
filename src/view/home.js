@@ -1,7 +1,7 @@
 import {
   addNoteOnSubmit, deleteNoteOnClick, signOutEvent, updateNoteOnClick, datePost,
 } from '../view-controller.js';
-import { getNotes, user } from '../controller/firebase-controller.js';
+import { getNotes, user, getUser } from '../controller/firebase-controller.js';
 
 
 const headerHome = () => {
@@ -9,9 +9,10 @@ const headerHome = () => {
   header.id = 'headerVistaHome';
 
   console.log(user());
+  console.log(getUser(user().uid));
 
   header.innerHTML = `
-      <button>${user().displayName}&nbsp &nbsp &nbsp<i class="fas fa-user"></i></button>
+      <button>${user().displayName !== null ? user().displayName : getUser(user().uid).name}&nbsp &nbsp &nbsp<i class="fas fa-user"></i></button>
       <h3>Bienvenido a tu red social</h3>
       <button id='botonSignOut'>Cierra sesión &nbsp &nbsp<i class="fas fa-puzzle-piece"></i></button>`;
 
@@ -33,7 +34,7 @@ const userData = (notes) => {
       <section>
       <p><span>${user().displayName}</span></p>
       <p><span>Nuev@ usuari@.</span></p>
-      <div><simg src="${note.photo}" style="width: 30px"></div>
+      <div>${note.idUser === user().uid ? `<img src="${note.photo}" style="width: 30px">` : '<img src="img/user.jpg" style="width: 30px">'}</div>
       </section>
     </aside>`;
   });
@@ -54,7 +55,7 @@ const itemNote = (objNote) => {
             <button id="buttonDelete-${objNote.id}"><i class="far fa-trash-alt"></i></button>
           </section>
           <span id="spanDate-${objNote.id}">
-            <p>${datePost(objNote.date)}</p>
+            <p>${datePost(objNote.date.toDate())}</p>
           </span>
           <span id="spanNote-${objNote.id}">
             <p>${objNote.note}</p>
@@ -171,7 +172,11 @@ export default () => {
   divHome.appendChild(headerHome());
 
   getNotes((notes) => {
-    // Condición si el elemento ya existe:
+    // Condiciones si el elemento ya existe:
+    if (document.getElementById('asidePerfilUser')) {
+      document.getElementById('asidePerfilUser').remove();
+    }
+
     if (document.getElementById('sectionNotes')) {
       document.getElementById('sectionNotes').remove();
     }

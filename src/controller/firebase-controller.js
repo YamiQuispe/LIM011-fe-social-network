@@ -2,14 +2,11 @@
 // Usuario:
 
 export const user = () => {
-  if (firebase.auth().currentUser) {
-    return firebase.auth().currentUser;
+  if (!firebase.auth().currentUser) {
+    window.location.hash = '/iniciasesion';
   }
 
-  window.location.hash = '/iniciasesion';
-  const hash = window.location.hash;
-
-  return hash;
+  return firebase.auth().currentUser;
 };
 
 
@@ -17,7 +14,8 @@ export const setUser = (userId, userObject) => (
   firebase.firestore().collection('users').doc(userId).set(userObject));
 
 
-export const getUser = userId => firebase.firestore().collection('users').doc(userId).get();
+export const getUser = userId => (firebase.firestore()
+  .collection('users').where('idUser', '==', userId).get());
 
 
 // Sesión:
@@ -54,13 +52,14 @@ export const getNotes = callback => firebase.firestore().collection('notes').ord
     const data = [];
 
     querySnapshot.forEach((doc) => {
+      console.log(doc);
       data.push({
         id: doc.id,
-        userId: doc.data().idUser,
+        idUser: doc.data().idUser,
         name: doc.data().name,
         photo: doc.data().photo,
         note: doc.data().note,
-        date: doc.data().date.toDate(),
+        date: doc.data().date,
       });
     });
 
