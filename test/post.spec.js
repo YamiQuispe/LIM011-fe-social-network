@@ -1,5 +1,6 @@
-// import realFirebase from 'firebase';
+
 import MockFirebase from 'mock-cloud-firestore';
+
 import {
   addNote, getNotes, deleteNote, updateNote,
 } from '../src/controller/firebase-controller.js';
@@ -73,7 +74,6 @@ describe('Testeo de lectura de posts en firebase', () => {
 
   it('Debería devolver un array de posts que coincida con el id del usuario.', done => (
     getNotes((notes) => {
-      console.log(notes);
       const noteRes = [{
         idUser: 'user001',
         id: 'note001',

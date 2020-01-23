@@ -1,18 +1,15 @@
 import {
   addNoteOnSubmit, deleteNoteOnClick, signOutEvent, updateNoteOnClick, datePost,
 } from '../view-controller.js';
-import { getNotes, user, getUser } from '../controller/firebase-controller.js';
+import { userDataAside, getNotes, user } from '../controller/firebase-controller.js';
 
 
-const headerHome = () => {
+const headerHome = (user) => {
   const header = document.createElement('header');
   header.id = 'headerVistaHome';
 
-  console.log(user());
-  console.log(getUser(user().uid));
-
   header.innerHTML = `
-      <button>${user().displayName !== null ? user().displayName : getUser(user().uid).name}&nbsp &nbsp &nbsp<i class="fas fa-user"></i></button>
+      <button>${}&nbsp &nbsp &nbsp<i class="fas fa-user"></i></button>
       <h3>Bienvenido a tu red social</h3>
       <button id='botonSignOut'>Cierra sesión &nbsp &nbsp<i class="fas fa-puzzle-piece"></i></button>`;
 
@@ -165,11 +162,11 @@ const sectionNotes = (notes) => {
 };
 
 
-export default () => {
+export default (user) => {
   const divHome = document.createElement('div');
   divHome.id = 'divVistaHome';
 
-  divHome.appendChild(headerHome());
+  divHome.appendChild(headerHome(user));
 
   getNotes((notes) => {
     // Condiciones si el elemento ya existe:

@@ -2,6 +2,7 @@ import {
   inicioSesion, registro, user, addNote, updateNote, deleteNote, loginFb, loginGoogle, setUser,
   signOut,
   getUser,
+  userDataAside,
 } from './controller/firebase-controller.js';
 
 const changeHash = (hash) => {
@@ -156,13 +157,15 @@ export const accountRegistration = (event) => {
 
         setUser(userId, userData);
 
+      //  userDataAside(userData);
+
         return changeHash('/home');
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
 
-        console.log('Cuenta no creada');
+        console.log('Cuenta no creada', error);
 
         if (errorCode === 'auth/email-already-in-use') {
           email.value = '';
@@ -396,7 +399,13 @@ export const deleteNoteOnClick = objNote => deleteNote(objNote.id)
 
 
 export const getUsers = (userId) => {
-  getUser(userId).then(doc => doc.data()).catch((error) => {
+  getUser(userId).then((doc) => {
+    const miVar = doc;
+    console.log(miVar);
+
+    return miVar.docs[0].data().name;
+  }).catch((error) => {
     console.log(error);
   });
 };
+

@@ -9,8 +9,10 @@ export const viewChange = (hash) => {
       return sectionMain.appendChild(components.login());
     case '#/creacuenta':
       return sectionMain.appendChild(components.createAccount());
-    case '#/home':
-      return sectionMain.appendChild(components.home());
+    case '#/home': {
+      
+      return sectionMain.appendChild(components.home(user));
+    }
     default:
       return sectionMain.appendChild(components.different());
   }

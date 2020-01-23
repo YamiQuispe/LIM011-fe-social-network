@@ -3,6 +3,7 @@ import {
   inicioSesion, registro, loginFb, loginGoogle, signOut,
 } from '../src/controller/firebase-controller.js';
 
+
 // Configurando firebase mock
 const firebasemock = require('firebase-mock');
 
@@ -17,7 +18,6 @@ global.firebase = firebasemock.MockFirebaseSdk(
   () => mockauth,
   () => mockfirestore,
 );
-
 
 // Testeo de Login
 

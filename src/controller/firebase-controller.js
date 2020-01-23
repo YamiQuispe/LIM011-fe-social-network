@@ -18,6 +18,34 @@ export const getUser = userId => (firebase.firestore()
   .collection('users').where('idUser', '==', userId).get());
 
 
+export const userDataAside = (userHome) => {
+  userHome.updateProfile({
+    displayName: userHome.name,
+  }).then(() => {
+    const displayName = user.displayName;
+
+    return {
+      idData: userHome.uid,
+      emailData: userHome.email,
+      nameData: displayName,
+    };
+  }, (error) => {
+    console.log(error);
+  });
+};
+
+
+export const getUsersAuth = () => firebase.auth().onAuthStateChanged(
+  (userAuth) => {
+    if (userAuth) {
+      console.log(userAuth);
+    } else {
+      console.log('error');
+    }
+  },
+);
+
+
 // Sesión:
 
 export const inicioSesion = (email, password) => (
