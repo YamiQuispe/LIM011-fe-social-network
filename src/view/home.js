@@ -1,15 +1,17 @@
 import {
   addNoteOnSubmit, deleteNoteOnClick, signOutEvent, updateNoteOnClick, datePost,
 } from '../view-controller.js';
-import { userDataAside, getNotes, user } from '../controller/firebase-controller.js';
+import { getNotes, user } from '../controller/firebase-controller.js';
 
 
-const headerHome = (user) => {
+const headerHome = (userAuth) => {
   const header = document.createElement('header');
   header.id = 'headerVistaHome';
 
+  console.log(user());
+
   header.innerHTML = `
-      <button>${}&nbsp &nbsp &nbsp<i class="fas fa-user"></i></button>
+      <button>${userAuth.name}&nbsp &nbsp &nbsp<i class="fas fa-user"></i></button>
       <h3>Bienvenido a tu red social</h3>
       <button id='botonSignOut'>Cierra sesión &nbsp &nbsp<i class="fas fa-puzzle-piece"></i></button>`;
 
@@ -19,35 +21,34 @@ const headerHome = (user) => {
 };
 
 
-const userData = (notes) => {
+const asideData = (userAuth) => {
   const aside = document.createElement('aside');
   aside.id = 'asidePerfilUser';
+  console.log(userAuth);
 
-  notes.forEach((note) => {
-    aside.innerHTML = `
+  aside.innerHTML = `
     <aside>
       <figure>
       </figure>
       <section>
-      <p><span>${user().displayName}</span></p>
+      <p><span>${userAuth.name}</span></p>
       <p><span>Nuev@ usuari@.</span></p>
-      <div>${note.idUser === user().uid ? `<img src="${note.photo}" style="width: 30px">` : '<img src="img/user.jpg" style="width: 30px">'}</div>
+      <div>${userAuth.photoURL ? `<img src="${userAuth.photoURL}" style="width: 30px">` : '<img src="img/user.jpg" style="width: 30px">'}</div>
       </section>
     </aside>`;
-  });
 
   return aside;
 };
 
 
-const itemNote = (objNote) => {
+const itemNote = (objNote, userData) => {
   const liElement = document.createElement('li');
 
   liElement.innerHTML = `
         <article id="articlePost-${objNote.id}" style="width:300px; height: 150px; background: white">
           <section>
             <div>${objNote.photo !== null ? `<img src="${objNote.photo}" style="width: 30px">` : '<img src="img/user.jpg" style="width: 30px">'}</div>
-            <span><a href="#">${objNote.name}</a></span>
+              <span>${(user().uid === objNote.idUser) ? `<a href="#">${userData.name}</a>` : `<a href="#">${objNote.name}</a>`}</span>
             <button id="buttonUpdate-${objNote.id}"><i class="far fa-edit"></i></button>
             <button id="buttonDelete-${objNote.id}"><i class="far fa-trash-alt"></i></button>
           </section>
@@ -71,7 +72,7 @@ const itemNote = (objNote) => {
 };
 
 
-const sectionNotes = (notes) => {
+const sectionNotes = (notes, userData) => {
   const sectionContainer = document.createElement('section');
   sectionContainer.id = 'sectionNotes';
 
@@ -98,7 +99,7 @@ const sectionNotes = (notes) => {
   const ul = sectionContainer.querySelector('#notes-list');
 
   notes.forEach((note) => {
-    ul.appendChild(itemNote(note));
+    ul.appendChild(itemNote(note, userData));
 
     const articlePost = sectionContainer.querySelector(`#articlePost-${note.id}`);
     const spanDate = articlePost.querySelector(`#spanDate-${note.id}`);
@@ -111,7 +112,7 @@ const sectionNotes = (notes) => {
     const buttonDeleteNote = sectionContainer.querySelector(`#buttonDelete-${note.id}`);
     const buttonUpdateNote = sectionContainer.querySelector(`#buttonUpdate-${note.id}`);
 
-    if (user().displayName !== note.name) {
+    if (user().uid !== note.idUser) {
       console.log((user().displayName));
       buttonUpdateNote.classList.add('hide');
       buttonDeleteNote.classList.add('hide');
@@ -162,14 +163,16 @@ const sectionNotes = (notes) => {
 };
 
 
-export default (user) => {
+export default (userAuth) => {
   const divHome = document.createElement('div');
   divHome.id = 'divVistaHome';
 
-  divHome.appendChild(headerHome(user));
-
   getNotes((notes) => {
     // Condiciones si el elemento ya existe:
+    if (document.getElementById('headerVistaHome')) {
+      document.getElementById('headerVistaHome').remove();
+    }
+
     if (document.getElementById('asidePerfilUser')) {
       document.getElementById('asidePerfilUser').remove();
     }
@@ -178,8 +181,9 @@ export default (user) => {
       document.getElementById('sectionNotes').remove();
     }
 
-    divHome.appendChild(userData(notes));
-    divHome.appendChild(sectionNotes(notes));
+    divHome.appendChild(headerHome(userAuth));
+    divHome.appendChild(asideData(userAuth));
+    divHome.appendChild(sectionNotes(notes, userAuth));
   });
 
   return divHome;

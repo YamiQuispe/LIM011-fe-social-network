@@ -1,8 +1,6 @@
 import {
   inicioSesion, registro, user, addNote, updateNote, deleteNote, loginFb, loginGoogle, setUser,
-  signOut,
-  getUser,
-  userDataAside,
+  signOut, getUsersAuth,
 } from './controller/firebase-controller.js';
 
 const changeHash = (hash) => {
@@ -156,8 +154,6 @@ export const accountRegistration = (event) => {
         console.log('Cuenta creada');
 
         setUser(userId, userData);
-
-      //  userDataAside(userData);
 
         return changeHash('/home');
       })
@@ -396,16 +392,3 @@ export const deleteNoteOnClick = objNote => deleteNote(objNote.id)
   }).catch((error) => {
     console.error('Error: ', error);
   });
-
-
-export const getUsers = (userId) => {
-  getUser(userId).then((doc) => {
-    const miVar = doc;
-    console.log(miVar);
-
-    return miVar.docs[0].data().name;
-  }).catch((error) => {
-    console.log(error);
-  });
-};
-

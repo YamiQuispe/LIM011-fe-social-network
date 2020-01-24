@@ -15,32 +15,15 @@ export const setUser = (userId, userObject) => (
 
 
 export const getUser = userId => (firebase.firestore()
-  .collection('users').where('idUser', '==', userId).get());
+  .collection('users').doc(userId).get());
 
 
-export const userDataAside = (userHome) => {
-  userHome.updateProfile({
-    displayName: userHome.name,
-  }).then(() => {
-    const displayName = user.displayName;
-
-    return {
-      idData: userHome.uid,
-      emailData: userHome.email,
-      nameData: displayName,
-    };
-  }, (error) => {
-    console.log(error);
-  });
-};
-
-
-export const getUsersAuth = () => firebase.auth().onAuthStateChanged(
+export const getUsersAuth = callback => firebase.auth().onAuthStateChanged(
   (userAuth) => {
     if (userAuth) {
-      console.log(userAuth);
+      callback(userAuth);
     } else {
-      console.log('error');
+      console.log('Error en la autenticación.');
     }
   },
 );

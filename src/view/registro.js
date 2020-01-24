@@ -39,15 +39,6 @@ const mainRegistroForm = () => {
                   <label for="fecha-nac">Fecha de nacimiento:</label><br>
                   <input type="date" name="fecha-nac" id="fecha-nac"><br>
                 </section>
-                <section>
-                  <label for="sexo">Sexo:</label><br>
-                  <select name="sexo" id="sexo">
-                    <option value="option" selected disabled>Seleccione</option>
-                    <option value="mujer">Mujer</option>
-                    <option value="hombre">Hombre</option>
-                    <option value="personalizado">Personalizado</option>
-                  </select>
-                </section>
               </div>
               <button type='button' id='botonRegistro'>Regístrate</button>
             </form>

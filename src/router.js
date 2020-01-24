@@ -1,4 +1,5 @@
 import { components } from './view/index.js';
+import { getUser, getUsersAuth } from './controller/firebase-controller.js';
 
 export const viewChange = (hash) => {
   const sectionMain = document.getElementById('root');
@@ -9,10 +10,16 @@ export const viewChange = (hash) => {
       return sectionMain.appendChild(components.login());
     case '#/creacuenta':
       return sectionMain.appendChild(components.createAccount());
-    case '#/home': {
-      
-      return sectionMain.appendChild(components.home(user));
-    }
+    case '#/home':
+      return getUsersAuth((currentUser) => {
+        getUser(currentUser.uid)
+          .then((docUser) => {
+            console.log(docUser.data());
+            sectionMain.appendChild(components.home(docUser.data()));
+          }).catch((error) => {
+            console.log(error);
+          });
+      });
     default:
       return sectionMain.appendChild(components.different());
   }
