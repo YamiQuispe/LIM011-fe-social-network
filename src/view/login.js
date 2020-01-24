@@ -60,7 +60,6 @@ const mainLoginForm = () => {
   const eventoEnlaceLoginGoogle = mainLogin.querySelector('#enlaceLoginGoogle');
   eventoEnlaceLoginGoogle.addEventListener('click', signInGoogle);
 
-
   return mainLogin;
 };
 
