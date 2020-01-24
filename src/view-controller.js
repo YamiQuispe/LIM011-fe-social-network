@@ -1,8 +1,6 @@
 import {
   inicioSesion, registro, user, addNote, updateNote, deleteNote, loginFb, loginGoogle, setUser,
   signOut,
-  getUsersAuth,
-  getUser,
 } from './controller/firebase-controller.js';
 
 const changeHash = (hash) => {

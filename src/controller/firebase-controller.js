@@ -2,11 +2,14 @@
 // Usuario:
 
 export const user = () => {
-  if (!firebase.auth().currentUser) {
-    window.location.hash = '/iniciasesion';
+  if (firebase.auth().currentUser) {
+    return firebase.auth().currentUser;
   }
 
-  return firebase.auth().currentUser;
+  window.location.hash = '/iniciasesion';
+  const hash = window.location.hash;
+
+  return hash;
 };
 
 

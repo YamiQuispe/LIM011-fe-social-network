@@ -14,7 +14,6 @@ export const viewChange = (hash) => {
       return getUsersAuth((currentUser) => {
         getUser(currentUser.uid)
           .then((docUser) => {
-            console.log(docUser.data());
             sectionMain.appendChild(components.home(docUser.data()));
 
             window.newUser = docUser.data().name;
