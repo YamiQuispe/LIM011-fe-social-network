@@ -1,16 +1,7 @@
 
 // Usuario:
 
-export const user = () => {
-  if (firebase.auth().currentUser) {
-    return firebase.auth().currentUser;
-  }
-
-  window.location.hash = '/iniciasesion';
-  const hash = window.location.hash;
-
-  return hash;
-};
+export const user = () => firebase.auth().currentUser;
 
 
 export const setUser = (userId, userObject) => (
@@ -26,7 +17,7 @@ export const getUsersAuth = callback => firebase.auth().onAuthStateChanged(
     if (userAuth) {
       callback(userAuth);
     } else {
-      console.log('Error en la autenticación.');
+      window.location.hash = '/iniciasesion';
     }
   },
 );
