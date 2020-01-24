@@ -16,6 +16,8 @@ export const viewChange = (hash) => {
           .then((docUser) => {
             console.log(docUser.data());
             sectionMain.appendChild(components.home(docUser.data()));
+
+            window.newUser = docUser.data().name;
           }).catch((error) => {
             console.log(error);
           });
