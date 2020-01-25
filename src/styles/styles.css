@@ -1,13 +1,4 @@
 
 @import url(estilos-login.css);
 @import url(estilos-registro.css);
-
-.hide {
-    display: none;
-}
-
-.show {
-    display: block;
-}
-
-/* @import url(estilos-home.css); */
+@import url(estilos-home.css);

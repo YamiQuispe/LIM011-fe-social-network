@@ -10,3 +10,11 @@
     height: 100px;
     background: gray;
 }
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
