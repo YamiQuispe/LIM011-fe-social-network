@@ -1,7 +1,7 @@
 // import MockFirebase from 'mock-cloud-firestore';
 
 import {
-  user, inicioSesion, signOut,
+  setUser, getUser, getUsersAuth, inicioSesion,
 } from '../src/controller/firebase-controller.js';
 
 
@@ -55,9 +55,19 @@ const userData = {
 };
 */
 
+
 // global.firebase = new MockFirebase(userData, { isNaiveSnapshotListenerEnabled: true });
 
+const newUser = {
+  idUser: 'user004',
+  email: 'geranio@gmail.com',
+  name: 'geranio',
+  photoURL: 'fotogeranio.jpg',
+};
+
+
 global.window.location.hash = '';
+
 
 firebase.firestore().collection('users').doc('user001').set({
   idUser: 'user001',
@@ -80,44 +90,53 @@ firebase.firestore().collection('users').doc('user003').set({
   date: '20-10-12',
 });
 
-/* const newUser = {
-  idUser: 'user004',
-  email: 'geranio@gmail.com',
-  name: 'geranio',
-  photoURL: 'fotogeranio.jpg',
-};
-*/
 
-describe('Autenticacion de usuario', () => {
+describe('Testeo de almacenamiento de usuarios en firebase', () => {
   it('Debería ser una función.', () => {
-    expect(typeof user).toBe('function');
+    expect(typeof setUser).toBe('function');
   });
 
-  it('Debería autenticar al usuario.', () => {
-    inicioSesion('girasol@gmail.com', 'girasol')
-      .then(() => {
-        expect(user().email).toBe('girasol@gmail.com');
-      });
-  });
-
-  it('Debería cambiar la vista cuando el usuario no está autenticado.', () => {
-    signOut()
-      .then(() => {
-        window.location.hash = '';
-        user();
-        window.location.hash = '/iniciasesion';
-      });
-  });
+  it('Deberia agregar un usuario.', done => setUser(newUser.idUser, newUser)
+    .then(() => getUser('user004')
+      .then((doc) => {
+        expect(doc.id).toBe('user004');
+        done();
+      })));
 });
 
-/*
-describe('Testeo de almacenamiento de posts en firebase', () => {
+
+describe('Testeo de documentos de usuarios en firebase', () => {
   it('Debería ser una función.', () => {
-    expect(typeof addNote).toBe('function');
+    expect(typeof getUser).toBe('function');
   });
 
-  it('Deberia agregar un usuario.', done => setUser(newUser).then(() => getUser(('user004'))
+  it('Debería devolver el documento de usuario que coincida con el id del usuario.', done => (
+    getUser('user001').then((docUser) => {
+      console.log(docUser.id);
+      expect(docUser.id).toBe('user001');
+      done();
+    })));
+});
 
-    done();
-  })));
-}); */
+
+describe('Testeo de observador de inicio de sesión en firebase', () => {
+  it('Debería ser una función.', () => {
+    expect(typeof getUsersAuth).toBe('function');
+  });
+
+  it('Debería detectar el usuario no autenticado.', () => {
+    getUsersAuth((userAuth) => {
+      expect(userAuth.isAnonymous).toBe(true);
+      window.location.hash = '/iniciasesion';
+    });
+  });
+
+  it('Debería detectar el usuario autenticado.', done => (
+    inicioSesion('newuser@gmail.com', 'newuser').then(() => {
+      getUsersAuth((userAuth) => {
+        expect(userAuth.isAnonymous).toBe(false);
+      });
+
+      done();
+    })));
+});

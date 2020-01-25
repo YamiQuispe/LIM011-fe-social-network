@@ -1,6 +1,6 @@
 
 import {
-  inicioSesion, registro, loginFb, loginGoogle, signOut,
+  user, inicioSesion, registro, loginFb, loginGoogle, signOut,
 } from '../src/controller/firebase-controller.js';
 
 
@@ -19,6 +19,21 @@ global.firebase = firebasemock.MockFirebaseSdk(
   () => mockfirestore,
 );
 
+
+describe('Autenticacion de usuario', () => {
+  it('Debería ser una función.', () => {
+    expect(typeof user).toBe('function');
+  });
+
+  it('Debería autenticar al usuario.', () => {
+    inicioSesion('girasol@gmail.com', 'girasol')
+      .then(() => {
+        expect(user().email).toBe('girasol@gmail.com');
+      });
+  });
+});
+
+
 // Testeo de Login
 
 describe('Testeo de Login en firebase', () => {
@@ -27,8 +42,8 @@ describe('Testeo de Login en firebase', () => {
   });
 
   it('Debería poder iniciar sesion', () => inicioSesion('amapola@gmail.com', 'amapola12')
-    .then((user) => {
-      expect(user.email).toBe('amapola@gmail.com');
+    .then((newuser) => {
+      expect(newuser.email).toBe('amapola@gmail.com');
     }));
 });
 
@@ -39,8 +54,8 @@ describe('Testeo de Registro en firebase', () => {
   });
 
   it('Debería poder crear cuenta.', () => registro('amapola@gmail.com', 'amapola12')
-    .then((user) => {
-      expect(user.email).toBe('amapola@gmail.com');
+    .then((newuser) => {
+      expect(newuser.email).toBe('amapola@gmail.com');
     }));
 });
 
@@ -51,8 +66,8 @@ describe('Testeo de Login con Facebook en firebase', () => {
   });
 
   it('Debería poder loguearme con Facebook.', () => loginFb()
-    .then((user) => {
-      expect(user.isAnonymous).toBe(false);
+    .then((newuser) => {
+      expect(newuser.isAnonymous).toBe(false);
     }));
 });
 
@@ -63,8 +78,8 @@ describe('Testeo de Login con Google en firebase', () => {
   });
 
   it('Debería poder loguearme con Google.', () => loginGoogle()
-    .then((user) => {
-      expect(user.isAnonymous).toBe(false);
+    .then((newuser) => {
+      expect(newuser.isAnonymous).toBe(false);
     }));
 });
 
@@ -75,7 +90,7 @@ describe('Testeo de cerrar sesión en firebase', () => {
   });
 
   it('Debería poder cerrar sesión.', () => signOut()
-    .then((user) => {
-      expect(user).toBe(undefined);
+    .then((newuser) => {
+      expect(newuser).toBe(undefined);
     }));
 });

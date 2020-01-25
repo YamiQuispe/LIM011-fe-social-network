@@ -57,7 +57,6 @@ export const getNotes = callback => firebase.firestore().collection('notes').ord
     const data = [];
 
     querySnapshot.forEach((doc) => {
-      console.log(doc);
       data.push({
         id: doc.id,
         idUser: doc.data().idUser,
