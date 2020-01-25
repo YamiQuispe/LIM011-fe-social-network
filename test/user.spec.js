@@ -20,43 +20,6 @@ global.firebase = firebasemock.MockFirebaseSdk(
   () => mockfirestore,
 );
 
-/*
-const userData = {
-  __collection__: {
-    users: {
-      __doc__: {
-        user001: {
-          idUser: 'user001',
-          email: 'amapola@gmail.com',
-          name: 'amapola',
-          photoURL: 'fotoamapola.jpg',
-        },
-        user002: {
-          idUser: 'user002',
-          email: 'girasol@gmail.com',
-          name: 'girasol',
-          photoURL: 'fotogirasol.jpg',
-        },
-        user003: {
-          idUser: 'user003',
-          email: 'rosa@gmail.com',
-          name: 'rosa',
-          date: '20-10-12',
-        },
-        user004: {
-          idUser: 'user004',
-          email: 'azucena@gmail.com',
-          name: 'azucena',
-          date: '20-11-12',
-        },
-      },
-    },
-  },
-};
-*/
-
-
-// global.firebase = new MockFirebase(userData, { isNaiveSnapshotListenerEnabled: true });
 
 const newUser = {
   idUser: 'user004',
@@ -127,6 +90,7 @@ describe('Testeo de observador de inicio de sesión en firebase', () => {
   it('Debería detectar el usuario no autenticado.', () => {
     getUsersAuth((userAuth) => {
       expect(userAuth.isAnonymous).toBe(true);
+
       window.location.hash = '/iniciasesion';
     });
   });
