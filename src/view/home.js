@@ -113,7 +113,6 @@ const sectionNotes = (notes, userData) => {
     const buttonUpdateNote = sectionContainer.querySelector(`#buttonUpdate-${note.id}`);
 
     if (user().uid !== note.idUser) {
-      console.log((user().displayName));
       buttonUpdateNote.classList.add('hide');
       buttonDeleteNote.classList.add('hide');
     }

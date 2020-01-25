@@ -75,7 +75,6 @@ describe('Testeo de documentos de usuarios en firebase', () => {
 
   it('Debería devolver el documento de usuario que coincida con el id del usuario.', done => (
     getUser('user001').then((docUser) => {
-      console.log(docUser.id);
       expect(docUser.id).toBe('user001');
       done();
     })));
@@ -87,11 +86,11 @@ describe('Testeo de observador de inicio de sesión en firebase', () => {
     expect(typeof getUsersAuth).toBe('function');
   });
 
-  it('Debería detectar el usuario no autenticado.', () => {
+  it('Debería cambiar la vista a #iniciasesion.', () => {
     getUsersAuth((userAuth) => {
-      expect(userAuth.isAnonymous).toBe(true);
-
-      window.location.hash = '/iniciasesion';
+      if (userAuth.isAnonymous === true) {
+        expect(window.location.hash).toBe('/iniciasesion');
+      }
     });
   });
 
