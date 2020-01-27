@@ -1,7 +1,7 @@
 // import MockFirebase from 'mock-cloud-firestore';
 
 import {
-  setUser, getUser, getUsersAuth, inicioSesion,
+  setUser, getUser, getUsersAuth, inicioSesion, signOut,
 } from '../src/controller/firebase-controller.js';
 
 
@@ -86,14 +86,6 @@ describe('Testeo de observador de inicio de sesión en firebase', () => {
     expect(typeof getUsersAuth).toBe('function');
   });
 
-  it('Debería cambiar la vista a #iniciasesion.', () => {
-    getUsersAuth((userAuth) => {
-      if (userAuth.isAnonymous === true) {
-        expect(window.location.hash).toBe('/iniciasesion');
-      }
-    });
-  });
-
   it('Debería detectar el usuario autenticado.', done => (
     inicioSesion('newuser@gmail.com', 'newuser').then(() => {
       getUsersAuth((userAuth) => {
@@ -102,4 +94,11 @@ describe('Testeo de observador de inicio de sesión en firebase', () => {
 
       done();
     })));
+
+  it('Debería cambiar la vista a #iniciasesion.', (done) => {
+    signOut().then((newuser) => {
+      if (newuser === undefined) expect(window.location.hash).toBe('/iniciasesion');
+      done();
+    });
+  });
 });

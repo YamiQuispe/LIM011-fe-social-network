@@ -17,6 +17,7 @@ export const getUsersAuth = callback => firebase.auth().onAuthStateChanged(
     if (userAuth) {
       callback(userAuth);
     } else {
+      console.log('aca consola');
       window.location.hash = '/iniciasesion';
     }
   },
