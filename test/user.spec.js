@@ -86,18 +86,18 @@ describe('Testeo de observador de inicio de sesión en firebase', () => {
     expect(typeof getUsersAuth).toBe('function');
   });
 
-  it('Debería detectar el usuario autenticado.', done => (
-    inicioSesion('newuser@gmail.com', 'newuser').then(() => {
-      getUsersAuth((userAuth) => {
-        expect(userAuth.isAnonymous).toBe(false);
-      });
-
+  it('Debería detectar el usuario autenticado.', (done) => {
+    getUsersAuth((userAuth) => {
+      expect(userAuth.isAnonymous).toBe(false);
       done();
-    })));
+    });
+
+    inicioSesion('newuser@gmail.com', 'newuser');
+  });
 
   it('Debería cambiar la vista a #iniciasesion.', (done) => {
-    signOut().then((newuser) => {
-      if (newuser === undefined) expect(window.location.hash).toBe('/iniciasesion');
+    signOut().then(() => {
+      expect(window.location.hash).toEqual('#/iniciasesion');
       done();
     });
   });
